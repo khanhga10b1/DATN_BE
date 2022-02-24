@@ -3,6 +3,10 @@ package hotel.booking.service;
 import hotel.booking.domain.LoginUser;
 import hotel.booking.domain.ResponseDataAPI;
 import hotel.booking.domain.UserDomain;
+import hotel.booking.domain.UserRegister;
+import hotel.booking.domain.request.PasswordRequest;
+import hotel.booking.domain.request.UserRequest;
+import hotel.booking.entity.UserEntity;
 import hotel.booking.exception.CustomException;
 import hotel.booking.repository.UserRepository;
 import hotel.booking.security.CustomAuthenticationProvider;
@@ -68,6 +72,66 @@ public class UserServiceImpl implements UserService {
         }
 
         return userDomain;
+    }
+
+    @Override
+    public void editProfile(Long userId, UserRequest userRequest) {
+        UserEntity userEntity = userRepository.findById(userId).orElseThrow(() -> {
+            logger.error(StringUtils.buildLog(Error.DATA_NOT_FOUND, Thread.currentThread().getStackTrace()[1].getLineNumber()));
+            return new CustomException(Error.DATA_NOT_FOUND.getMessage(), Error.DATA_NOT_FOUND.getCode(),
+                    HttpStatus.BAD_REQUEST);
+        });
+        userEntity.setAddress(userRequest.getAddress());
+        userEntity.setAvatar(userRequest.getAvatar());
+        userEntity.setName(userRequest.getName());
+        userEntity.setPhone(userRequest.getPhone());
+        userRepository.save(userEntity);
+    }
+
+    @Override
+    public void registerUser(UserRegister userRegister) {
+        if(StringUtils.isEmpty(userRegister.getEmail()) || StringUtils.isEmpty(userRegister.getName()) || StringUtils.isEmpty(userRegister.getPassword())) {
+            logger.error(StringUtils.buildLog(Error.REQUIRED_FIELD, Thread.currentThread().getStackTrace()[1].getLineNumber()));
+            throw  new CustomException(Error.REQUIRED_FIELD.getMessage(), Error.REQUIRED_FIELD.getCode(),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        UserEntity user = userRepository.findByEmail(userRegister.getEmail().trim()).orElse(null);
+        if(user != null) {
+            logger.error(StringUtils.buildLog(Error.EXIST_EMAIL, Thread.currentThread().getStackTrace()[1].getLineNumber()));
+            throw  new CustomException(Error.EXIST_EMAIL.getMessage(), Error.EXIST_EMAIL.getCode(),
+                    HttpStatus.BAD_REQUEST);
+        }
+        UserEntity userEntity = new UserEntity();
+        userEntity.setName(userRegister.getName());
+        userEntity.setEmail(userRegister.getEmail());
+        userEntity.setPassword(passwordEncoder.encode(userRegister.getPassword()));
+        userRepository.save(userEntity);
+    }
+
+    @Override
+    public Boolean checkAccount(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email).orElse(null);
+        return userEntity != null;
+    }
+
+    @Override
+    public void changePassword(Long id,PasswordRequest passwordRequest) {
+
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> {
+            logger.error(StringUtils.buildLog(Error.DATA_NOT_FOUND, Thread.currentThread().getStackTrace()[1].getLineNumber()));
+            return new CustomException(Error.DATA_NOT_FOUND.getMessage(), Error.DATA_NOT_FOUND.getCode(),
+                    HttpStatus.BAD_REQUEST);
+        });
+
+        if(!passwordEncoder.matches(passwordRequest.getOldPass(), userEntity.getPassword())) {
+            logger.error(StringUtils.buildLog(Error.OLD_PASSWORD_IS_WRONG, Thread.currentThread().getStackTrace()[1].getLineNumber()));
+            throw  new CustomException(Error.OLD_PASSWORD_IS_WRONG.getMessage(), Error.OLD_PASSWORD_IS_WRONG.getCode(),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        userEntity.setPassword(passwordEncoder.encode(passwordRequest.getNewPass()));
+
     }
 
 

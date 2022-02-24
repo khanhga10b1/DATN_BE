@@ -17,6 +17,7 @@ public class HotelDomain {
     private UserDomain userDomain;
     private List<String> image;
     private List<String> amenities;
+    private Integer rooms;
 
     public HotelDomain(){}
 
@@ -114,5 +115,13 @@ public class HotelDomain {
 
     public void setImage(List<String> image) {
         this.image = image;
+    }
+
+    public Integer getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(Integer rooms) {
+        this.rooms = rooms;
     }
 }

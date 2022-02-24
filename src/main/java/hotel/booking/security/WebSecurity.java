@@ -17,7 +17,7 @@ import javax.servlet.Filter;
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
-    public static String[] PERMIT_URLS = {"/v2/api-docs", "/configuration/**", "/swagger*/**","/swagger-ui.html", "/v2/api-docs", "/swagger-resources/**", "/webjars/springfox-swagger-ui/**", "/webjars/**", "/auth/**", "/test/**"};
+    public static String[] PERMIT_URLS = {"/v2/api-docs", "/configuration/**", "/swagger*/**","/swagger-ui.html", "/v2/api-docs", "/swagger-resources/**", "/webjars/springfox-swagger-ui/**", "/webjars/**", "/auth/**", "/test/**", "/hotels/**"};
 
     private final PasswordEncoder passwordEncoder;
     private final UserService userDetailService;

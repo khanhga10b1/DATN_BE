@@ -20,4 +20,8 @@ public class StringUtils {
     public static String buildLog(String err, int line) {
         return String.format(PATTERN_LOG, line, null , err);
     }
+
+    public static boolean isEmpty(String input) {
+        return input == null || input.isEmpty();
+    }
 }

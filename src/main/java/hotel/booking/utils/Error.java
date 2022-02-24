@@ -25,7 +25,8 @@ public enum Error {
     NEW_AND_OLD_PASSWORD_IS_SIMILAR("C0017", "New and old password is similar"),
     OLD_PASSWORD_IS_WRONG("C0018", "Old password is incorrect"),
     INVALID_USERNAME_OR_PASSWORD("C0019", "Invalid Username or Password"),
-    USER_IS_LOCK("S0020", "Your account is temporarily disabled");
+    USER_IS_LOCK("S0020", "Your account is temporarily disabled"),
+    EXIST_EMAIL("S0021", "Email này đã tồn tại!");
 
     private String code;
 

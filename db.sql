@@ -83,7 +83,8 @@ create table "room"
     created_by   bigint,
     created_date timestamp,
     updated_by   bigint,
-    updated_date timestamp
+    updated_date timestamp,
+    constraint fk_hotel_id_4 foreign key (hotel_id) references "hotel" (id)
 );
 
 create sequence room_amenities_seq start 1;
