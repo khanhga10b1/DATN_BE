@@ -10,9 +10,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface UserService extends UserDetailsService {
 
     String loginWithEmailAndPassword(LoginUser loginUser);
+
     UserDomain getCurrentAccount();
+
     void editProfile(Long userId, UserRequest userRequest);
+
     void registerUser(UserRegister userRegister);
+
     Boolean checkAccount(String email);
-    void changePassword(Long id,PasswordRequest passwordRequest);
+
+    void changePassword(Long id, PasswordRequest passwordRequest);
 }

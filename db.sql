@@ -162,6 +162,7 @@ create table "reservation"
     check_in      timestamp,
     check_out     timestamp,
     cost          numeric,
+    status        varchar(20),
     created_by    bigint,
     created_date  timestamp,
     updated_by    bigint,

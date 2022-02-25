@@ -62,10 +62,10 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDomain userDomain = null;
         if (authentication.getPrincipal() instanceof UserDomain) {
-           userDomain = (UserDomain) authentication.getPrincipal();
+            userDomain = (UserDomain) authentication.getPrincipal();
         }
 
-        if(userDomain == null) {
+        if (userDomain == null) {
             logger.error(StringUtils.buildLog(Error.BAD_CREDENTIALS, Thread.currentThread().getStackTrace()[1].getLineNumber()));
             throw new CustomException(Error.BAD_CREDENTIALS.getMessage(), Error.BAD_CREDENTIALS.getCode(),
                     HttpStatus.UNAUTHORIZED);
@@ -90,16 +90,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(UserRegister userRegister) {
-        if(StringUtils.isEmpty(userRegister.getEmail()) || StringUtils.isEmpty(userRegister.getName()) || StringUtils.isEmpty(userRegister.getPassword())) {
+        if (StringUtils.isEmpty(userRegister.getEmail()) || StringUtils.isEmpty(userRegister.getName()) || StringUtils.isEmpty(userRegister.getPassword())) {
             logger.error(StringUtils.buildLog(Error.REQUIRED_FIELD, Thread.currentThread().getStackTrace()[1].getLineNumber()));
-            throw  new CustomException(Error.REQUIRED_FIELD.getMessage(), Error.REQUIRED_FIELD.getCode(),
+            throw new CustomException(Error.REQUIRED_FIELD.getMessage(), Error.REQUIRED_FIELD.getCode(),
                     HttpStatus.BAD_REQUEST);
         }
 
         UserEntity user = userRepository.findByEmail(userRegister.getEmail().trim()).orElse(null);
-        if(user != null) {
+        if (user != null) {
             logger.error(StringUtils.buildLog(Error.EXIST_EMAIL, Thread.currentThread().getStackTrace()[1].getLineNumber()));
-            throw  new CustomException(Error.EXIST_EMAIL.getMessage(), Error.EXIST_EMAIL.getCode(),
+            throw new CustomException(Error.EXIST_EMAIL.getMessage(), Error.EXIST_EMAIL.getCode(),
                     HttpStatus.BAD_REQUEST);
         }
         UserEntity userEntity = new UserEntity();
@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePassword(Long id,PasswordRequest passwordRequest) {
+    public void changePassword(Long id, PasswordRequest passwordRequest) {
 
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> {
             logger.error(StringUtils.buildLog(Error.DATA_NOT_FOUND, Thread.currentThread().getStackTrace()[1].getLineNumber()));
@@ -124,9 +124,9 @@ public class UserServiceImpl implements UserService {
                     HttpStatus.BAD_REQUEST);
         });
 
-        if(!passwordEncoder.matches(passwordRequest.getOldPass(), userEntity.getPassword())) {
+        if (!passwordEncoder.matches(passwordRequest.getOldPass(), userEntity.getPassword())) {
             logger.error(StringUtils.buildLog(Error.OLD_PASSWORD_IS_WRONG, Thread.currentThread().getStackTrace()[1].getLineNumber()));
-            throw  new CustomException(Error.OLD_PASSWORD_IS_WRONG.getMessage(), Error.OLD_PASSWORD_IS_WRONG.getCode(),
+            throw new CustomException(Error.OLD_PASSWORD_IS_WRONG.getMessage(), Error.OLD_PASSWORD_IS_WRONG.getCode(),
                     HttpStatus.BAD_REQUEST);
         }
 

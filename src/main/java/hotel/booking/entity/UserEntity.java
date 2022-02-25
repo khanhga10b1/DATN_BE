@@ -28,8 +28,8 @@ public class UserEntity extends BaseEntity {
     private String address;
     @Column(name = "status")
     private Boolean status;
-
-
+    @OneToOne(mappedBy = "userEntity")
+    private HotelEntity hotelEntity;
 
 
     public String getEmail() {
@@ -94,5 +94,13 @@ public class UserEntity extends BaseEntity {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public HotelEntity getHotelEntity() {
+        return hotelEntity;
+    }
+
+    public void setHotelEntity(HotelEntity hotelEntity) {
+        this.hotelEntity = hotelEntity;
     }
 }

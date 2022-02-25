@@ -3,28 +3,30 @@ package hotel.booking.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "room_image")
-public class RoomImageEntity extends BaseEntity {
-    private static final long serialVersionUID = -5942612259595519841L;
+@Table(name = "rule")
+public class RuleEntity extends BaseEntity {
+
+    private static final long serialVersionUID = 8441579541097369715L;
 
     @Id
     @Column(name = "id")
-    @SequenceGenerator(name = "room_image_seq", sequenceName = "room_image_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "room_image_seq")
+    @SequenceGenerator(name = "rule_seq", sequenceName = "rule_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "rule_seq")
     private Long id;
-    @Column(name = "image_link")
-    private String imageLink;
+    @Column(name = "name")
+    private String name;
     @Column(name = "room_id")
     private Long roomId;
     @ManyToOne
     @JoinColumn(name = "room_id", insertable = false, updatable = false)
     private RoomEntity roomEntity;
 
-    public RoomImageEntity() {}
+    public RuleEntity() {
+    }
 
-    public RoomImageEntity(Long roomId, String imageLink) {
+    public RuleEntity(Long roomId, String name) {
         this.roomId = roomId;
-        this.imageLink = imageLink;
+        this.name = name;
     }
 
     public Long getId() {
@@ -35,12 +37,12 @@ public class RoomImageEntity extends BaseEntity {
         this.id = id;
     }
 
-    public String getImageLink() {
-        return imageLink;
+    public String getName() {
+        return name;
     }
 
-    public void setImageLink(String imageLink) {
-        this.imageLink = imageLink;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getRoomId() {

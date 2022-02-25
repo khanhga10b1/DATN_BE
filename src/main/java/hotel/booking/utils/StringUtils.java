@@ -22,6 +22,18 @@ public class StringUtils {
     }
 
     public static boolean isEmpty(String input) {
-        return input == null || input.isEmpty();
+        return input == null || input.trim().isEmpty();
+    }
+
+    public static String replaceSpecialCharacter(String value) {
+        if(value != null) {
+            value = value.replaceAll("\\\\", "\\\\\\\\");
+            value = value.replaceAll("%","\\\\%");
+            value = value.replaceAll("_","\\\\_");
+        } else {
+            value = "";
+        }
+        return value;
     }
 }
+

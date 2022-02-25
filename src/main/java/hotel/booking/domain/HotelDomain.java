@@ -1,6 +1,7 @@
 package hotel.booking.domain;
 
 import javax.persistence.Column;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HotelDomain {
@@ -15,8 +16,8 @@ public class HotelDomain {
     private String description;
     private Float rate;
     private UserDomain userDomain;
-    private List<String> image;
-    private List<String> amenities;
+    private List<String> image = new ArrayList<>();
+    private List<String> amenities = new ArrayList<>();
     private Integer rooms;
 
     public HotelDomain(){}

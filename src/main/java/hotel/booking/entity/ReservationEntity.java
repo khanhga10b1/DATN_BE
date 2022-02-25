@@ -39,6 +39,8 @@ public class ReservationEntity extends BaseEntity {
     private Date checkOut;
     @Column(name = "cost")
     private Double cost;
+    @Column(name = "status")
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "room_id", updatable = false, insertable = false)

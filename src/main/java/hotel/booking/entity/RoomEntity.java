@@ -1,6 +1,8 @@
 package hotel.booking.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "room")
@@ -32,6 +34,21 @@ public class RoomEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "hotel_id", insertable = false, updatable = false)
     private HotelEntity hotelEntity;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private List<RoomAmenitiesEntity> roomAmenitiesEntities = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private List<RoomImageEntity> roomImageEntities = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private List<ReservationEntity> reservationEntities = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private List<RuleEntity> ruleEntities = new ArrayList<>();
 
     public RoomEntity() {}
 
@@ -105,5 +122,37 @@ public class RoomEntity extends BaseEntity {
 
     public void setHotelEntity(HotelEntity hotelEntity) {
         this.hotelEntity = hotelEntity;
+    }
+
+    public List<RoomAmenitiesEntity> getRoomAmenitiesEntities() {
+        return roomAmenitiesEntities;
+    }
+
+    public void setRoomAmenitiesEntities(List<RoomAmenitiesEntity> roomAmenitiesEntities) {
+        this.roomAmenitiesEntities = roomAmenitiesEntities;
+    }
+
+    public List<RoomImageEntity> getRoomImageEntities() {
+        return roomImageEntities;
+    }
+
+    public void setRoomImageEntities(List<RoomImageEntity> roomImageEntities) {
+        this.roomImageEntities = roomImageEntities;
+    }
+
+    public List<ReservationEntity> getReservationEntities() {
+        return reservationEntities;
+    }
+
+    public void setReservationEntities(List<ReservationEntity> reservationEntities) {
+        this.reservationEntities = reservationEntities;
+    }
+
+    public List<RuleEntity> getRuleEntities() {
+        return ruleEntities;
+    }
+
+    public void setRuleEntities(List<RuleEntity> ruleEntities) {
+        this.ruleEntities = ruleEntities;
     }
 }

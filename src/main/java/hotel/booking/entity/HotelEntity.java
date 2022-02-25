@@ -1,6 +1,8 @@
 package hotel.booking.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "hotel")
@@ -33,6 +35,26 @@ public class HotelEntity extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private UserEntity userEntity;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
+    private List<HotelAmenitiesEntity> hotelAmenitiesEntities = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
+    private List<HotelImageEntity> hotelImageEntities = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
+    private List<ReservationEntity> reservationEntities = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
+    private List<RatingEntity> ratingEntities = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id")
+    private List<RoomEntity> roomEntities = new ArrayList<>();
 
     public HotelEntity() {
     }
@@ -116,4 +138,45 @@ public class HotelEntity extends BaseEntity {
     public void setUserEntity(UserEntity userEntity) {
         this.userEntity = userEntity;
     }
+
+    public List<HotelAmenitiesEntity> getHotelAmenitiesEntities() {
+        return hotelAmenitiesEntities;
+    }
+
+    public void setHotelImageEntities(List<HotelImageEntity> hotelImageEntities) {
+        this.hotelImageEntities = hotelImageEntities;
+    }
+
+    public List<HotelImageEntity> getHotelImageEntities() {
+        return hotelImageEntities;
+    }
+
+    public void setHotelAmenitiesEntities(List<HotelAmenitiesEntity> hotelAmenitiesEntities) {
+        this.hotelAmenitiesEntities = hotelAmenitiesEntities;
+    }
+
+    public List<ReservationEntity> getReservationEntities() {
+        return reservationEntities;
+    }
+
+    public void setReservationEntities(List<ReservationEntity> reservationEntities) {
+        this.reservationEntities = reservationEntities;
+    }
+
+    public List<RatingEntity> getRatingEntities() {
+        return ratingEntities;
+    }
+
+    public void setRatingEntities(List<RatingEntity> ratingEntities) {
+        this.ratingEntities = ratingEntities;
+    }
+
+    public List<RoomEntity> getRoomEntities() {
+        return roomEntities;
+    }
+
+    public void setRoomEntities(List<RoomEntity> roomEntities) {
+        this.roomEntities = roomEntities;
+    }
+
 }

@@ -24,6 +24,11 @@ public class RoomAmenitiesEntity extends BaseEntity {
     public RoomAmenitiesEntity() {
     }
 
+    public RoomAmenitiesEntity(Long roomId, String name) {
+        this.roomId = roomId;
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }
