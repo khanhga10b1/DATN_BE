@@ -35,18 +35,18 @@ public class RoomEntity extends BaseEntity {
     @JoinColumn(name = "hotel_id", insertable = false, updatable = false)
     private HotelEntity hotelEntity;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "room_id")
     private List<RoomAmenitiesEntity> roomAmenitiesEntities = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "room_id")
     private List<RoomImageEntity> roomImageEntities = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "room_id")
     private List<ReservationEntity> reservationEntities = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "room_id")
     private List<RuleEntity> ruleEntities = new ArrayList<>();
 

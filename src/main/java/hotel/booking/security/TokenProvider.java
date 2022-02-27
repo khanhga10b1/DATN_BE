@@ -9,6 +9,7 @@ import hotel.booking.repository.UserRepository;
 import hotel.booking.utils.Error;
 import hotel.booking.utils.StringUtils;
 import io.jsonwebtoken.*;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,8 @@ public class TokenProvider implements Serializable {
     private Long JWT_EXPIRATION;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public String generateToken(Authentication authentication) {
         Date now = new Date();
@@ -74,21 +77,13 @@ public class TokenProvider implements Serializable {
 
     public Authentication getAuthentication(String token) {
         String email = getUsernameFromToken(token);
-        UserDomain userDomain = new UserDomain();
+
         UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> {
             logger.error(StringUtils.buildLog(Error.TOKEN_INVALID, Thread.currentThread().getStackTrace()[1].getLineNumber()));
             return new CustomException(Error.TOKEN_INVALID.getMessage(), Error.TOKEN_INVALID.getCode(),
                     HttpStatus.UNAUTHORIZED);
         });
-        userDomain.setEmail(userEntity.getEmail());
-        userDomain.setPassword(userEntity.getPassword());
-        userDomain.setId(userEntity.getId());
-        userDomain.setName(userEntity.getName());
-        userDomain.setStatus(userEntity.getStatus());
-        userDomain.setPhone(userEntity.getPhone());
-        userDomain.setAvatar(userEntity.getAvatar());
-        userDomain.setAddress(userEntity.getAddress());
-
+        UserDomain userDomain = modelMapper.map(userEntity, UserDomain.class);
         return new UsernamePasswordAuthenticationToken(userDomain, "", Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
     }
 

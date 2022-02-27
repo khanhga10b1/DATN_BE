@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -126,28 +127,26 @@ public class RoomServiceImpl implements RoomService {
         List<RoomImageEntity> roomImageEntities = roomEntity.getRoomImageEntities();
         List<RuleEntity> ruleEntities = roomEntity.getRuleEntities();
         List<RoomAmenitiesEntity> roomAmenitiesEntities = roomEntity.getRoomAmenitiesEntities();
-        ruleRepository.deleteAll(ruleEntities);
-        roomAmenitiesRepository.deleteAll(roomAmenitiesEntities);
-        roomImageRepository.deleteAll(roomImageEntities);
+        ruleEntities.clear();
+        roomAmenitiesEntities.clear();
+        roomImageEntities.clear();
         final Long roomId = roomEntity.getId();
 
         if(!CollectionUtils.isEmpty(roomRequest.getImage())) {
-            roomImageEntities = roomRequest.getImage().stream().map(room -> new RoomImageEntity(roomId, room)).collect(Collectors.toList());
-            roomImageRepository.saveAll(roomImageEntities);
+            roomImageEntities.addAll(roomRequest.getImage().stream().map(room -> new RoomImageEntity(roomId, room)).collect(Collectors.toList()));
             roomDomain.setImage(roomImageEntities.stream().map(RoomImageEntity::getImageLink).collect(Collectors.toList()));
         }
 
         if(!CollectionUtils.isEmpty(roomRequest.getAmenities())) {
-            roomAmenitiesEntities = roomRequest.getAmenities().stream().map(room -> new RoomAmenitiesEntity(roomId, room)).collect(Collectors.toList());
-            roomAmenitiesRepository.saveAll(roomAmenitiesEntities);
+            roomAmenitiesEntities.addAll(roomRequest.getAmenities().stream().map(room -> new RoomAmenitiesEntity(roomId, room)).collect(Collectors.toList()));
             roomDomain.setAmenities(roomAmenitiesEntities.stream().map(RoomAmenitiesEntity::getName).collect(Collectors.toList()));
         }
 
         if(!CollectionUtils.isEmpty(roomRequest.getRules())) {
-            ruleEntities = roomRequest.getRules().stream().map(room -> new RuleEntity(roomId, room)).collect(Collectors.toList());
-            ruleRepository.saveAll(ruleEntities);
+            ruleEntities.addAll(roomRequest.getRules().stream().map(room -> new RuleEntity(roomId, room)).collect(Collectors.toList()));
             roomDomain.setRules(ruleEntities.stream().map(RuleEntity::getName).collect(Collectors.toList()));
         }
+        roomRepository.save(roomEntity);
         return roomDomain;
     }
 

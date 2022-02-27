@@ -6,6 +6,7 @@ import hotel.booking.exception.CustomException;
 import hotel.booking.repository.UserRepository;
 import hotel.booking.utils.Error;
 import hotel.booking.utils.StringUtils;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,28 +28,19 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     
     @Autowired
     private PasswordEncoder bCryptEncoder;
-
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String email = authentication.getPrincipal().toString();
         String password = authentication.getCredentials().toString();
-        UserDomain userDomain = new UserDomain();
+
         UserEntity userEntity = userRepository.findByEmail(email).orElse(null);
         if (userEntity != null) {
-            userDomain.setId(userEntity.getId());
-            userDomain.setEmail(userEntity.getEmail());
-            userDomain.setPassword(userEntity.getPassword());
-            userDomain.setPhone(userEntity.getPhone());
-            userDomain.setAvatar(userEntity.getAvatar());
-            userDomain.setAddress(userEntity.getAddress());
-//            userDomain.setRoles(userEntity.getUserRoleChannels().stream()
-//                    .map(userRoleChannelEntity -> userRoleChannelEntity.getRole().convertDomain())
-//                    .collect(Collectors.toSet()));
-            
-            // Check login id and password
+            UserDomain userDomain = modelMapper.map(userEntity, UserDomain.class);
             if (bCryptEncoder.matches(password, userDomain.getPassword())) {
                 return new UsernamePasswordAuthenticationToken(userDomain, password);
             } else {

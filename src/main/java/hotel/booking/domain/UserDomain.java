@@ -3,13 +3,15 @@ package hotel.booking.domain;
 
 public class UserDomain {
     private Long id;
-    private String name;
-    private String phone;
     private String email;
     private String password;
-    private Boolean status;
+    private String name;
+    private String phone;
     private String avatar;
     private String address;
+    private Boolean status;
+    private Boolean linked;
+    private String paypalId;
 
 
     public UserDomain() {}
@@ -76,6 +78,22 @@ public class UserDomain {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Boolean getLinked() {
+        return linked;
+    }
+
+    public void setLinked(Boolean linked) {
+        this.linked = linked;
+    }
+
+    public String getPaypalId() {
+        return paypalId;
+    }
+
+    public void setPaypalId(String paypalId) {
+        this.paypalId = paypalId;
     }
 }
 

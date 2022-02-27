@@ -1,60 +1,27 @@
-package hotel.booking.entity;
+package hotel.booking.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 import java.util.Date;
 
-@Entity
-@Table(name = "reservation")
-public class ReservationEntity extends BaseEntity {
-
-
-    private static final long serialVersionUID = 155049212519243044L;
-
-    @Id
-    @Column(name = "id")
-    @SequenceGenerator(name = "reservation_seq", sequenceName = "reservation_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "reservation_seq")
+public class ReservationDomain {
     private Long id;
-    @Column(name = "room_id")
     private Long roomId;
-    @Column(name = "hotel_id")
     private Long hotelId;
-    @Column(name = "cancel_reason")
     private String cancelReason;
-    @Column(name = "customer_id")
     private Long customerId;
-    @Column(name = "email")
     private String email;
-    @Column(name = "code")
     private String code;
-    @Column(name = "name")
     private String name;
-    @Column(name = "address")
     private String address;
-    @Column(name = "note")
     private String note;
-    @Column(name = "check_in")
     private Date checkIn;
-    @Column(name = "check_out")
     private Date checkOut;
-    @Column(name = "cost")
     private Double cost;
-    @Column(name = "status")
     private String status;
+    private Integer adult;
+    private Integer children;
 
-    @ManyToOne
-    @JoinColumn(name = "room_id", updatable = false, insertable = false)
-    private RoomEntity roomEntity;
-
-    @ManyToOne
-    @JoinColumn(name = "hotel_id", updatable = false, insertable = false)
-    private HotelEntity hotelEntity;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "guest_id")
-    private GuestEntity guestEntity;
-
-    public ReservationEntity() { }
+    public ReservationDomain() {}
 
     public Long getId() {
         return id;
@@ -160,22 +127,6 @@ public class ReservationEntity extends BaseEntity {
         this.cost = cost;
     }
 
-    public RoomEntity getRoomEntity() {
-        return roomEntity;
-    }
-
-    public void setRoomEntity(RoomEntity roomEntity) {
-        this.roomEntity = roomEntity;
-    }
-
-    public HotelEntity getHotelEntity() {
-        return hotelEntity;
-    }
-
-    public void setHotelEntity(HotelEntity hotelEntity) {
-        this.hotelEntity = hotelEntity;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -184,12 +135,19 @@ public class ReservationEntity extends BaseEntity {
         this.status = status;
     }
 
-
-    public GuestEntity getGuestEntity() {
-        return guestEntity;
+    public Integer getChildren() {
+        return children;
     }
 
-    public void setGuestEntity(GuestEntity guestEntity) {
-        this.guestEntity = guestEntity;
+    public void setChildren(Integer children) {
+        this.children = children;
+    }
+
+    public Integer getAdult() {
+        return adult;
+    }
+
+    public void setAdult(Integer adult) {
+        this.adult = adult;
     }
 }

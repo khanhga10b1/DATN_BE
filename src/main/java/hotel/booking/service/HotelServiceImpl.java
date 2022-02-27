@@ -2,11 +2,11 @@ package hotel.booking.service;
 
 import hotel.booking.domain.HotelDomain;
 import hotel.booking.domain.RoomDomain;
-import hotel.booking.domain.UserDomain;
 import hotel.booking.domain.request.HotelRequest;
 import hotel.booking.entity.*;
 import hotel.booking.exception.CustomException;
 import hotel.booking.repository.*;
+import static hotel.booking.utils.DateTimeUtils.*;
 import hotel.booking.utils.Error;
 import hotel.booking.utils.StringUtils;
 import org.modelmapper.ModelMapper;
@@ -153,16 +153,6 @@ public class HotelServiceImpl implements HotelService {
         return result;
     }
 
-    public boolean isBetween(Long date, Long min, Long max) {
-        return date >= min && date <= max;
-    }
-
-    public static Date getDateWithoutTimeUsingFormat(Date date)
-            throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat(
-                "dd/MM/yyyy");
-        return formatter.parse(formatter.format(date));
-    }
 
     @Override
     public Map<String, Object> getHotels(Long userId, Integer offset, Integer limit, String city, String search) {

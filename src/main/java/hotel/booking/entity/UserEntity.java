@@ -28,6 +28,10 @@ public class UserEntity extends BaseEntity {
     private String address;
     @Column(name = "status")
     private Boolean status;
+    @Column(name = "linked")
+    private Boolean linked;
+    @Column(name = "paypal_id")
+    private String paypalId;
     @OneToOne(mappedBy = "userEntity")
     private HotelEntity hotelEntity;
 
@@ -102,5 +106,21 @@ public class UserEntity extends BaseEntity {
 
     public void setHotelEntity(HotelEntity hotelEntity) {
         this.hotelEntity = hotelEntity;
+    }
+
+    public Boolean getLinked() {
+        return linked;
+    }
+
+    public void setLinked(Boolean linked) {
+        this.linked = linked;
+    }
+
+    public String getPaypalId() {
+        return paypalId;
+    }
+
+    public void setPaypalId(String paypalId) {
+        this.paypalId = paypalId;
     }
 }

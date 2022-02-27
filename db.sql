@@ -9,7 +9,7 @@ create table "user"
     name         varchar(100),
     avatar       varchar(300),
     address      varchar(500),
-    linked       varchar(300),
+    linked       boolean,
     paypal_id    varchar(300),
     status       boolean,
     created_by   bigint,
@@ -145,6 +145,20 @@ create table "rating"
     constraint fk_hotel_id_3 foreign key (hotel_id) references "hotel" (id)
 );
 
+
+create sequence guest_seq start 1;
+
+create table "guest"
+(
+    id bigint primary key default nextval('guest_seq'),
+    adult smallint,
+    children smallint,
+    created_by    bigint,
+    created_date  timestamp,
+    updated_by    bigint,
+    updated_date  timestamp
+);
+
 create sequence reservation_seq start 1;
 
 create table "reservation"
@@ -152,6 +166,7 @@ create table "reservation"
     id            bigint primary key default nextval('reservation_seq'),
     room_id       bigint,
     hotel_id      bigint,
+    guest_id      bigint,
     cancel_reason text,
     customer_id   bigint,
     email         varchar(50),
@@ -168,7 +183,8 @@ create table "reservation"
     updated_by    bigint,
     updated_date  timestamp,
     constraint fk_hotel_id_4 foreign key (hotel_id) references "hotel" (id),
-    constraint room_id_3 foreign key (room_id) references "room" (id)
+    constraint room_id_3 foreign key (room_id) references "room" (id),
+    constraint fk_guest foreign key (guest_id) references "guest"(id)
 );
 
 

@@ -4,6 +4,7 @@ public class UserRegister {
     private String name;
     private String password;
     private String email;
+    private Boolean linked = false;
 
     public UserRegister() {}
 
@@ -29,5 +30,13 @@ public class UserRegister {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Boolean getLinked() {
+        return linked;
+    }
+
+    public void setLinked(Boolean linked) {
+        this.linked = linked;
     }
 }
