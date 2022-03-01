@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,15 +19,26 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final OrRequestMatcher requestMatcher = new OrRequestMatcher(Arrays.stream(WebSecurity.PERMIT_URLS)
+    private static final OrRequestMatcher requestMatcher = new OrRequestMatcher(Arrays.stream(WebSecurity.PERMIT_URLS)
             .map(AntPathRequestMatcher::new).collect(Collectors.toList()));
+
+    private static final OrRequestMatcher matcherWithMethod;
+
+    static  {
+        List<RequestMatcher> requestMatchers = new ArrayList<>();
+        WebSecurity.PERMIT_URL_WITH_METHOD.forEach((k ,v) -> v.forEach(value -> requestMatchers.add(new AntPathRequestMatcher(value, k.name()))));
+        matcherWithMethod = new OrRequestMatcher(requestMatchers);
+    }
+
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -48,7 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (!requestMatcher.matches(request)) {
+        if (!requestMatcher.matches(request) && !matcherWithMethod.matches(request)) {
             String token = tokenProvider.resolveToken(request);
             try {
                 if (token != null && tokenProvider.validateToken(token)) {

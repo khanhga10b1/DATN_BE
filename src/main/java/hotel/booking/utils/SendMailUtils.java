@@ -45,6 +45,7 @@ public class SendMailUtils {
             Context context = new Context();
             context.setVariables(paramsInfo);
             helper.setSubject(mail.getSubject());
+            helper.setText(mail.getText());
             helper.setFrom(mailFrom);
             helper.setTo(Arrays.copyOf(mail.getToEmail().toArray(), mail.getToEmail().toArray().length, String[].class));
 //            if (StringUtils.isEmpty(mail.getCc())) {

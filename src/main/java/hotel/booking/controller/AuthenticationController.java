@@ -22,11 +22,15 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginUser loginUser) {
-        Map<String, String> response = new HashMap<>();
-        response.put("token", userService.loginWithEmailAndPassword(loginUser));
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginUser loginUser) {
+        return ResponseEntity.ok(userService.loginWithEmailAndPassword(loginUser));
     }
+
+    @PostMapping("/loginAdmin")
+    public ResponseEntity<Map<String, Object>> loginAdmin(@RequestBody LoginUser loginUser) {
+        return ResponseEntity.ok(userService.loginWithEmailAndPassword(loginUser));
+    }
+
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserRegister userRegister) {

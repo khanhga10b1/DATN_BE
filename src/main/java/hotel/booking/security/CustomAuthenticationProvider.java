@@ -1,5 +1,6 @@
 package hotel.booking.security;
 
+import hotel.booking.domain.RoleDomain;
 import hotel.booking.domain.UserDomain;
 import hotel.booking.entity.UserEntity;
 import hotel.booking.exception.CustomException;
@@ -41,7 +42,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserEntity userEntity = userRepository.findByEmail(email).orElse(null);
         if (userEntity != null) {
             UserDomain userDomain = modelMapper.map(userEntity, UserDomain.class);
-            if (bCryptEncoder.matches(password, userDomain.getPassword())) {
+            userDomain.setRole(modelMapper.map(userEntity.getRoleEntity(), RoleDomain.class));
+            if (bCryptEncoder.matches(password, userEntity.getPassword())) {
                 return new UsernamePasswordAuthenticationToken(userDomain, password);
             } else {
                 logger.error(StringUtils.buildLog(Error.INVALID_USERNAME_OR_PASSWORD, Thread.currentThread().getStackTrace()[1].getLineNumber()));

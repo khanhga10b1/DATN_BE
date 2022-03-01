@@ -2,6 +2,7 @@ package hotel.booking.security;
 
 
 import hotel.booking.constant.ConstantDefine;
+import hotel.booking.domain.RoleDomain;
 import hotel.booking.domain.UserDomain;
 import hotel.booking.entity.UserEntity;
 import hotel.booking.exception.CustomException;
@@ -84,7 +85,8 @@ public class TokenProvider implements Serializable {
                     HttpStatus.UNAUTHORIZED);
         });
         UserDomain userDomain = modelMapper.map(userEntity, UserDomain.class);
-        return new UsernamePasswordAuthenticationToken(userDomain, "", Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+        userDomain.setRole(modelMapper.map(userEntity.getRoleEntity(), RoleDomain.class));
+        return new UsernamePasswordAuthenticationToken(userDomain, "", Collections.singleton(new SimpleGrantedAuthority(userEntity.getRoleEntity().getCode())));
     }
 
     public String getUsernameFromToken(String token) {

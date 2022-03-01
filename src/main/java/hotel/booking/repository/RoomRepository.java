@@ -17,4 +17,6 @@ public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
     @Query("select r from RoomEntity r where r.hotelId = ?2 and lower(r.name) like %?1%")
     Page<RoomEntity> findRoomEntitiesByHotelId(String search, Long hotelId, Pageable pageable);
 
+    long countByHotelId(Long hotelId);
+
 }

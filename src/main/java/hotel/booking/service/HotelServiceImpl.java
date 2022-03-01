@@ -51,6 +51,8 @@ public class HotelServiceImpl implements HotelService {
     private RoomAmenitiesRepository roomAmenitiesRepository;
     @Autowired
     private RuleRepository ruleRepository;
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Override
@@ -75,8 +77,10 @@ public class HotelServiceImpl implements HotelService {
         hotelEntity.setName(hotelRequest.getName());
         hotelEntity.setPhone(hotelRequest.getPhone());
         hotelEntity = hotelRepository.save(hotelEntity);
+        UserEntity userEntity = userRepository.getById(hotelEntity.getAccountId());
         final Long hotelId = hotelEntity.getId();
         HotelDomain hotelDomain = convertEntityToDomain(hotelEntity);
+        hotelDomain.setPaypalId(userEntity.getPaypalId());
         List<HotelImageEntity> imageEntities = hotelImageRepository.findByHotelId(hotelId);
         hotelImageRepository.deleteAll(imageEntities);
         List<HotelAmenitiesEntity> amenitiesEntities = hotelAmenitiesRepository.findByHotelId(hotelId);
@@ -94,10 +98,6 @@ public class HotelServiceImpl implements HotelService {
         return hotelDomain;
     }
 
-    @Override
-    public List<HotelDomain> getListHotels() {
-        return null;
-    }
 
     @Override
     public HotelDomain getHotelById(Long id) {
@@ -113,6 +113,7 @@ public class HotelServiceImpl implements HotelService {
         hotelDomain.setAmenities(amenities);
         List<RoomEntity> roomEntities = roomRepository.getAllByHotelId(hotelEntity.getId());
         hotelDomain.setRooms(roomEntities.size());
+        hotelDomain.setPaypalId(hotelEntity.getUserEntity().getPaypalId());
         return hotelDomain;
     }
 
@@ -170,6 +171,7 @@ public class HotelServiceImpl implements HotelService {
 
         List<HotelDomain> hotelDomains = hotelEntities.stream().map(hotelEntity -> {
             HotelDomain hotelDomain = convertEntityToDomain(hotelEntity);
+            hotelDomain.setPaypalId(hotelEntity.getUserEntity().getPaypalId());
             List<String> image = hotelImageRepository.findByHotelId(hotelEntity.getId()).stream().map(HotelImageEntity::getImageLink).collect(Collectors.toList());
             hotelDomain.setImage(image);
             List<String> amenities = hotelAmenitiesRepository.findByHotelId(hotelEntity.getId()).stream().map(HotelAmenitiesEntity::getName).collect(Collectors.toList());

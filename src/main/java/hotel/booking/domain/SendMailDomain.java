@@ -9,6 +9,7 @@ public class SendMailDomain{
 
 	private List<String> toEmail;
 	private String subject;
+	private String text;
 
 	public List<String> getToEmail() {
 		return toEmail;
@@ -26,5 +27,11 @@ public class SendMailDomain{
 		this.subject = subject;
 	}
 
+	public void setText(String text) {
+		this.text = text;
+	}
 
+	public String getText() {
+		return text;
+	}
 }

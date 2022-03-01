@@ -30,7 +30,7 @@ public class HotelEntity extends BaseEntity {
     @Column(name = "description")
     private String description;
     @Column(name = "rate")
-    private Float rate;
+    private Double rate;
 
     @OneToOne
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
@@ -43,10 +43,6 @@ public class HotelEntity extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "hotel_id")
     private List<HotelImageEntity> hotelImageEntities = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "hotel_id")
-    private List<ReservationEntity> reservationEntities = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "hotel_id")
@@ -123,11 +119,11 @@ public class HotelEntity extends BaseEntity {
         this.description = description;
     }
 
-    public Float getRate() {
+    public Double getRate() {
         return rate;
     }
 
-    public void setRate(Float rate) {
+    public void setRate(Double rate) {
         this.rate = rate;
     }
 
@@ -155,13 +151,6 @@ public class HotelEntity extends BaseEntity {
         this.hotelAmenitiesEntities = hotelAmenitiesEntities;
     }
 
-    public List<ReservationEntity> getReservationEntities() {
-        return reservationEntities;
-    }
-
-    public void setReservationEntities(List<ReservationEntity> reservationEntities) {
-        this.reservationEntities = reservationEntities;
-    }
 
     public List<RatingEntity> getRatingEntities() {
         return ratingEntities;
@@ -178,5 +167,4 @@ public class HotelEntity extends BaseEntity {
     public void setRoomEntities(List<RoomEntity> roomEntities) {
         this.roomEntities = roomEntities;
     }
-
 }

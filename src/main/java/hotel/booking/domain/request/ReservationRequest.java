@@ -3,7 +3,6 @@ package hotel.booking.domain.request;
 
 public class ReservationRequest {
     private Long roomId;
-    private Long hotelId;
     private String cancelReason;
     private Long customerId;
     private String email;
@@ -15,8 +14,10 @@ public class ReservationRequest {
     private String checkOut;
     private Double cost;
     private String status;
+    private String phone;
     private Integer adult;
     private Integer children;
+    private Integer diffDays;
 
     public ReservationRequest() {}
 
@@ -27,14 +28,6 @@ public class ReservationRequest {
 
     public void setRoomId(Long roomId) {
         this.roomId = roomId;
-    }
-
-    public Long getHotelId() {
-        return hotelId;
-    }
-
-    public void setHotelId(Long hotelId) {
-        this.hotelId = hotelId;
     }
 
     public String getCancelReason() {
@@ -125,6 +118,14 @@ public class ReservationRequest {
         this.status = status;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public Integer getAdult() {
         return adult;
     }
@@ -139,5 +140,13 @@ public class ReservationRequest {
 
     public void setChildren(Integer children) {
         this.children = children;
+    }
+
+    public Integer getDiffDays() {
+        return diffDays;
+    }
+
+    public void setDiffDays(Integer diffDays) {
+        this.diffDays = diffDays;
     }
 }

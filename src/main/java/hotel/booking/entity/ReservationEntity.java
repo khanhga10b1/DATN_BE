@@ -17,8 +17,6 @@ public class ReservationEntity extends BaseEntity {
     private Long id;
     @Column(name = "room_id")
     private Long roomId;
-    @Column(name = "hotel_id")
-    private Long hotelId;
     @Column(name = "cancel_reason")
     private String cancelReason;
     @Column(name = "customer_id")
@@ -41,14 +39,12 @@ public class ReservationEntity extends BaseEntity {
     private Double cost;
     @Column(name = "status")
     private String status;
+    @Column(name = "phone")
+    private String phone;
 
     @ManyToOne
     @JoinColumn(name = "room_id", updatable = false, insertable = false)
     private RoomEntity roomEntity;
-
-    @ManyToOne
-    @JoinColumn(name = "hotel_id", updatable = false, insertable = false)
-    private HotelEntity hotelEntity;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "guest_id")
@@ -72,13 +68,6 @@ public class ReservationEntity extends BaseEntity {
         this.roomId = roomId;
     }
 
-    public Long getHotelId() {
-        return hotelId;
-    }
-
-    public void setHotelId(Long hotelId) {
-        this.hotelId = hotelId;
-    }
 
     public String getCancelReason() {
         return cancelReason;
@@ -168,14 +157,6 @@ public class ReservationEntity extends BaseEntity {
         this.roomEntity = roomEntity;
     }
 
-    public HotelEntity getHotelEntity() {
-        return hotelEntity;
-    }
-
-    public void setHotelEntity(HotelEntity hotelEntity) {
-        this.hotelEntity = hotelEntity;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -191,5 +172,13 @@ public class ReservationEntity extends BaseEntity {
 
     public void setGuestEntity(GuestEntity guestEntity) {
         this.guestEntity = guestEntity;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 }

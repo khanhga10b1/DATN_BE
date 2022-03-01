@@ -13,8 +13,6 @@ public interface HotelService {
 
     HotelDomain editHotel(Long hotelId, HotelRequest hotelRequest);
 
-    List<HotelDomain> getListHotels();
-
     HotelDomain getHotelById(Long id);
 
     Map<Long, List<RoomDomain>> getAvailableList(Date checkIn, Date checkOut);

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 public class LoginUser {
     private String email;
     private String password;
+    private boolean isAdmin;
 
     public LoginUser() {}
 
@@ -22,5 +23,22 @@ public class LoginUser {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    @Override
+    public String toString() {
+        return "LoginUser{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", isAdmin=" + isAdmin +
+                '}';
     }
 }

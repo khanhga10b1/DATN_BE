@@ -32,8 +32,15 @@ public class UserEntity extends BaseEntity {
     private Boolean linked;
     @Column(name = "paypal_id")
     private String paypalId;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private RoleEntity roleEntity;
+
     @OneToOne(mappedBy = "userEntity")
     private HotelEntity hotelEntity;
+
+    public UserEntity() {this.status = true;}
 
 
     public String getEmail() {
@@ -122,5 +129,13 @@ public class UserEntity extends BaseEntity {
 
     public void setPaypalId(String paypalId) {
         this.paypalId = paypalId;
+    }
+
+    public RoleEntity getRoleEntity() {
+        return roleEntity;
+    }
+
+    public void setRoleEntity(RoleEntity roleEntity) {
+        this.roleEntity = roleEntity;
     }
 }

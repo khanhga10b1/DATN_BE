@@ -90,7 +90,7 @@ public class RoomServiceImpl implements RoomService {
             logger.error(StringUtils.buildLog(Error.DATA_NOT_FOUND, Thread.currentThread().getStackTrace()[1].getLineNumber()));
             return new CustomException(Error.DATA_NOT_FOUND.getMessage(), Error.DATA_NOT_FOUND.getCode(),
                     HttpStatus.BAD_REQUEST);
-        });;
+        });
 
         RoomDomain roomDomain = modelMapper.map(roomEntity, RoomDomain.class);
         List<String> amenities = roomAmenitiesRepository.findByRoomId(roomEntity.getId()).stream().map(RoomAmenitiesEntity::getName).collect(Collectors.toList());

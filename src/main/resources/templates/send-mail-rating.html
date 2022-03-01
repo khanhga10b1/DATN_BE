@@ -11,6 +11,15 @@
 
 </head>
 <body style="margin: 0; padding: 0;">
-
+<p style="font-size: 16px">Please review your experiences with our hotel services.</p>
+<div style="width: 300px;
+    display: block;margin: auto; border: 1px solid #ff770085; padding : 10px;border-radius: 4px">
+    <div style="margin : auto; text-align:center">
+        <img src=${roomImage} width="100%" style="margin-bottom: 15px; max-width: 280px; max-height : 250px" />
+        <span th:text="${hotelName}" style = "margin: 20px 0;text-align: center;width : 100%"><br/></span>
+        <div style="height: 15px"></div>
+        <a target="_blank" th:href="${'http://localhost:3000/rating/'  + hotelId + '/' + code}" style= "padding : 5px 20px; background : #ff7700; color : white;text-decoration: none">RATING</a>
+    </div>
+</div>
 </body>
 </html>

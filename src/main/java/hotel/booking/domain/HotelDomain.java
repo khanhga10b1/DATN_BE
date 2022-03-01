@@ -14,11 +14,12 @@ public class HotelDomain {
     private String email;
     private String phone;
     private String description;
-    private Float rate;
+    private Double rate;
     private UserDomain userDomain;
     private List<String> image = new ArrayList<>();
     private List<String> amenities = new ArrayList<>();
     private Integer rooms;
+    private String paypalId;
 
     public HotelDomain(){}
 
@@ -86,11 +87,11 @@ public class HotelDomain {
         this.description = description;
     }
 
-    public Float getRate() {
+    public Double getRate() {
         return rate;
     }
 
-    public void setRate(Float rate) {
+    public void setRate(Double rate) {
         this.rate = rate;
     }
 
@@ -124,5 +125,13 @@ public class HotelDomain {
 
     public void setRooms(Integer rooms) {
         this.rooms = rooms;
+    }
+
+    public String getPaypalId() {
+        return paypalId;
+    }
+
+    public void setPaypalId(String paypalId) {
+        this.paypalId = paypalId;
     }
 }

@@ -5,6 +5,7 @@ public class UserRequest {
     private String name;
     private String address;
     private String phone;
+    private String paypalId;
 
     public UserRequest(){}
 
@@ -38,5 +39,13 @@ public class UserRequest {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getPaypalId() {
+        return paypalId;
+    }
+
+    public void setPaypalId(String paypalId) {
+        this.paypalId = paypalId;
     }
 }

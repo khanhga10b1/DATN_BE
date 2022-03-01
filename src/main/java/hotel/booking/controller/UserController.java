@@ -1,7 +1,9 @@
 package hotel.booking.controller;
 
 import hotel.booking.domain.ResponseByName;
+import hotel.booking.domain.UserDomain;
 import hotel.booking.domain.UserRegister;
+import hotel.booking.domain.request.ChangeStatusRequest;
 import hotel.booking.domain.request.PasswordRequest;
 import hotel.booking.domain.request.UserRequest;
 import hotel.booking.service.UserService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/accounts")
@@ -36,7 +39,25 @@ public class UserController {
         return  ResponseEntity.ok().build();
     }
 
+    @PutMapping("/paypal/{id}")
+    public ResponseEntity<String> updatePaypal(@PathVariable("id") Long userId, @RequestBody UserRequest request) {
+        userService.updatePaypal(userId, request);
+        return ResponseEntity.ok().build();
+    }
 
+    @GetMapping
+    public ResponseEntity<List<UserDomain>> getListUsers() {
+        return ResponseEntity.ok(userService.getListUsers());
+    }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDomain> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @PutMapping("/changeStatus/{id}")
+    public ResponseEntity<UserDomain> changeStatus(@PathVariable("id") Long userId, @RequestBody ChangeStatusRequest request) {
+        return ResponseEntity.ok(userService.changeStatus(userId, request));
+    }
 
 }

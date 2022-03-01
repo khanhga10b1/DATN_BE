@@ -17,5 +17,12 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
 
     List<ReservationEntity> findByCode(String code);
 
+    @Query("select rv from ReservationEntity rv inner join RoomEntity r on rv.roomId = r.id and r.hotelId = ?1")
+    List<ReservationEntity> findByHotelId(Long hotelId);
 
+    @Query("select count (rv) from ReservationEntity rv inner join RoomEntity r on rv.roomId = ?2 and rv.roomId = r.id and r.hotelId = ?1")
+    long countByHotelIdAndRoomId(Long hotelId, Long roomId);
+
+    @Query("select count(rv) from ReservationEntity rv inner join RoomEntity r on rv.roomId = r.id and r.hotelId = ?1 where rv.createdDate >= ?2 and rv.createdDate < ?3")
+    long countByHotelIAndCreatedDate(Long hotelId, Date min, Date max);
 }

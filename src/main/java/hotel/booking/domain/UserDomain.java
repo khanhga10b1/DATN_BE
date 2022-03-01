@@ -1,10 +1,11 @@
 package hotel.booking.domain;
 
 
+import java.util.Date;
+
 public class UserDomain {
     private Long id;
     private String email;
-    private String password;
     private String name;
     private String phone;
     private String avatar;
@@ -12,6 +13,9 @@ public class UserDomain {
     private Boolean status;
     private Boolean linked;
     private String paypalId;
+    private Date createdDate;
+    private Date updatedDate;
+    private RoleDomain role;
 
 
     public UserDomain() {}
@@ -46,14 +50,6 @@ public class UserDomain {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Boolean getStatus() {
@@ -94,6 +90,30 @@ public class UserDomain {
 
     public void setPaypalId(String paypalId) {
         this.paypalId = paypalId;
+    }
+
+    public void setRole(RoleDomain role) {
+        this.role = role;
+    }
+
+    public RoleDomain getRole() {
+        return role;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }
 

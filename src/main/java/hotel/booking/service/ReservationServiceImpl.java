@@ -7,9 +7,11 @@ import hotel.booking.domain.request.CheckValidRequest;
 import hotel.booking.domain.request.ReservationRequest;
 import hotel.booking.entity.GuestEntity;
 import hotel.booking.entity.ReservationEntity;
+import hotel.booking.entity.RoomEntity;
 import hotel.booking.exception.CustomException;
 import hotel.booking.repository.GuestRepository;
 import hotel.booking.repository.ReservationRepository;
+import hotel.booking.repository.RoomRepository;
 import hotel.booking.utils.DateTimeUtils;
 import hotel.booking.utils.Error;
 import hotel.booking.utils.SendMailUtils;
@@ -43,6 +45,8 @@ public class ReservationServiceImpl implements ReservationService {
     private SendMailUtils sendMailUtils;
     @Autowired
     private GuestRepository guestRepository;
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Override
     public ResponseEntity<ResponseByName<String, Object>> checkValidReservation(CheckValidRequest checkValidRequest) {
@@ -88,7 +92,6 @@ public class ReservationServiceImpl implements ReservationService {
             guestEntity = guestRepository.save(guestEntity);
             reservationEntity.setGuestEntity(guestEntity);
             reservationEntity.setRoomId(request.getRoomId());
-            reservationEntity.setHotelId(request.getHotelId());
             reservationEntity.setCancelReason(request.getCancelReason());
             reservationEntity.setCustomerId(request.getCustomerId());
             reservationEntity.setEmail(request.getEmail());
@@ -100,11 +103,14 @@ public class ReservationServiceImpl implements ReservationService {
             reservationEntity.setCheckOut(checkOut);
             reservationEntity.setCost(request.getCost());
             reservationEntity.setStatus(request.getStatus());
+            reservationEntity.setPhone(request.getPhone());
             reservationEntity = reservationRepository.save(reservationEntity);
 
             ReservationDomain reservationDomain = modelMapper.map(reservationEntity, ReservationDomain.class);
             reservationDomain.setAdult(reservationEntity.getGuestEntity().getAdult());
             reservationDomain.setChildren(reservationEntity.getGuestEntity().getChildren());
+            RoomEntity roomEntity = roomRepository.getById(reservationEntity.getRoomId());
+            reservationDomain.setHotelId(roomEntity.getHotelId());
             return reservationDomain;
 
         }
@@ -118,6 +124,8 @@ public class ReservationServiceImpl implements ReservationService {
                 ReservationDomain reservationDomain = modelMapper.map(reservationEntity, ReservationDomain.class);
                 reservationDomain.setAdult(reservationEntity.getGuestEntity().getAdult());
                 reservationDomain.setChildren(reservationEntity.getGuestEntity().getChildren());
+                RoomEntity roomEntity = roomRepository.getById(reservationEntity.getRoomId());
+                reservationDomain.setHotelId(roomEntity.getHotelId());
                 return reservationDomain;
             }).collect(Collectors.toList());
         } else {
@@ -126,6 +134,8 @@ public class ReservationServiceImpl implements ReservationService {
                 ReservationDomain reservationDomain = modelMapper.map(reservationEntity, ReservationDomain.class);
                 reservationDomain.setAdult(reservationEntity.getGuestEntity().getAdult());
                 reservationDomain.setChildren(reservationEntity.getGuestEntity().getChildren());
+                RoomEntity roomEntity = roomRepository.getById(reservationEntity.getRoomId());
+                reservationDomain.setHotelId(roomEntity.getHotelId());
                 return reservationDomain;
             }).collect(Collectors.toList());
         }
@@ -136,7 +146,7 @@ public class ReservationServiceImpl implements ReservationService {
         List<ReservationEntity> reservationEntities = reservationRepository.findAll();
 
         return reservationEntities.stream().filter(r -> customerId == null || customerId.equals(r.getCustomerId()))
-                .filter(r -> hotelId == null || hotelId.equals(r.getHotelId()))
+                .filter(r -> hotelId == null || hotelId.equals(r.getRoomEntity().getHotelId()))
                 .filter(r -> CollectionUtils.isEmpty(status) || status.contains(r.getStatus()))
                 .filter(r -> CollectionUtils.isEmpty(roomIds) || roomIds.contains(r.getRoomId()))
                 .filter(r -> {
@@ -171,18 +181,43 @@ public class ReservationServiceImpl implements ReservationService {
                     ReservationDomain reservationDomain = modelMapper.map(reservationEntity, ReservationDomain.class);
                     reservationDomain.setAdult(reservationEntity.getGuestEntity().getAdult());
                     reservationDomain.setChildren(reservationEntity.getGuestEntity().getChildren());
+                    RoomEntity roomEntity = roomRepository.getById(reservationEntity.getRoomId());
+                    reservationDomain.setHotelId(roomEntity.getHotelId());
                     return reservationDomain;
                 }).collect(Collectors.toList());
     }
 
     @Override
     public void sendMail(ReservationRequest reservationRequest) {
+        RoomEntity room = roomRepository.getById(reservationRequest.getRoomId());
         SendMailDomain sendMailDomain = new SendMailDomain();
         sendMailDomain.setToEmail(Arrays.asList("ntmhang2@gmail.com"));
-        sendMailDomain.setSubject("hihih");
+        sendMailDomain.setSubject("Your reservation has been send to hotel manager");
+        sendMailDomain.setText("Thanks for using our hotel reservation system.The manager will confirm your reservation soon.");
         Map<String, Object> params = new HashMap<>();
-        params.put("test", "test");
+        params.put("roomImage", room.getRoomImageEntities().get(0).getImageLink());
+        params.put("hotelName", room.getHotelEntity().getName());
+        params.put("hotelCity", room.getHotelEntity().getCity());
+        params.put("code", reservationRequest.getCode());
+        params.put("hotelAddress", room.getHotelEntity().getAddress());
+        params.put("roomName", room.getName());
+        params.put("checkIn", reservationRequest.getCheckIn());
+        params.put("checkOut", reservationRequest.getCheckOut());
+        params.put("cost", reservationRequest.getCost());
+        params.put("adult", reservationRequest.getAdult());
+        params.put("children", reservationRequest.getChildren());
+        params.put("name", reservationRequest.getName());
+        params.put("email", reservationRequest.getEmail());
+        params.put("phone", reservationRequest.getPhone());
+        params.put("address", reservationRequest.getAddress());
+        params.put("note", reservationRequest.getNote());
+        params.put("diffDays", reservationRequest.getDiffDays());
+        params.put("hotelId", room.getHotelId());
         sendMailUtils.sendMailWithTemplate(sendMailDomain, "send-mail-reservation", params);
+        sendMailDomain.setSubject("RATING THE HOTEL SERVICES");
+        sendMailDomain.setText("Please rate the hotel services");
+        sendMailUtils.sendMailWithTemplate(sendMailDomain, "send-mail-rating", params);
+
 
     }
 
