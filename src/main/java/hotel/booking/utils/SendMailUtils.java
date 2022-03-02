@@ -28,14 +28,14 @@ public class SendMailUtils {
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
     @Autowired
-    public JavaMailSender mailSender;
+    private JavaMailSender mailSender;
     @Autowired
     private SpringTemplateEngine templateEngine;
     
     @Value("${spring.mail.username}")
     private String mailFrom;
 
-    public boolean sendMailWithTemplate(SendMailDomain mail, String templateFile, Map<String, Object> paramsInfo) {
+    public boolean sendMailWithTemplate(SendMailDomain mail) {
 
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -43,7 +43,7 @@ public class SendMailUtils {
                     StandardCharsets.UTF_8.name());
 
             Context context = new Context();
-            context.setVariables(paramsInfo);
+            context.setVariables(mail.getParams());
             helper.setSubject(mail.getSubject());
             helper.setText(mail.getText());
             helper.setFrom(mailFrom);
@@ -54,7 +54,7 @@ public class SendMailUtils {
 //            if (StringUtils.isEmpty(mail.getBcc())) {
 //                helper.setBcc(mail.getBcc());
 //            }
-            String html = templateEngine.process(templateFile, context);
+            String html = templateEngine.process(mail.getTemp(), context);
             helper.setText(html, true);
             mailSender.send(message);
 

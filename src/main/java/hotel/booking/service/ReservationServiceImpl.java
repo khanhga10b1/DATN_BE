@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -47,6 +48,8 @@ public class ReservationServiceImpl implements ReservationService {
     private GuestRepository guestRepository;
     @Autowired
     private RoomRepository roomRepository;
+    @Autowired
+    private JmsTemplate jmsTemplate;
 
     @Override
     public ResponseEntity<ResponseByName<String, Object>> checkValidReservation(CheckValidRequest checkValidRequest) {
@@ -68,7 +71,7 @@ public class ReservationServiceImpl implements ReservationService {
     public ReservationDomain editReservation(Long id, ReservationRequest request) throws ParseException {
         Date checkIn = DateTimeUtils.convertStringToDate(request.getCheckIn(), "dd/MM/yyyy");
         Date checkOut = DateTimeUtils.convertStringToDate(request.getCheckOut(), "dd/MM/yyyy");
-        if (!checkValid(checkIn, checkOut, request.getRoomId())) {
+        if (id == null && !checkValid(checkIn, checkOut, request.getRoomId())) {
             logger.error(StringUtils.buildLog(Error.BAD_REQUEST, Thread.currentThread().getStackTrace()[1].getLineNumber()));
             throw new CustomException(Error.BAD_REQUEST.getMessage(), Error.BAD_REQUEST.getCode(),
                     HttpStatus.BAD_REQUEST);
@@ -87,6 +90,7 @@ public class ReservationServiceImpl implements ReservationService {
                 guestEntity = new GuestEntity();
 
             }
+            String oldStatus = reservationEntity.getStatus();
             guestEntity.setChildren(request.getChildren());
             guestEntity.setAdult(request.getAdult());
             guestEntity = guestRepository.save(guestEntity);
@@ -102,9 +106,22 @@ public class ReservationServiceImpl implements ReservationService {
             reservationEntity.setCheckIn(checkIn);
             reservationEntity.setCheckOut(checkOut);
             reservationEntity.setCost(request.getCost());
-            reservationEntity.setStatus(request.getStatus());
+            reservationEntity.setStatus( id == null ? "confirmed" : request.getStatus());
             reservationEntity.setPhone(request.getPhone());
             reservationEntity = reservationRepository.save(reservationEntity);
+
+            if(oldStatus !=null && !oldStatus.equals(request.getStatus())) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("cancelReason", request.getCancelReason());
+                params.put("status", request.getStatus());
+                SendMailDomain sendMailDomain = new SendMailDomain();
+                sendMailDomain.setText("Your reservation has been " + request.getStatus());
+                sendMailDomain.setSubject("Your reservation has been " + request.getStatus());
+                sendMailDomain.setToEmail(Collections.singletonList(request.getEmail()));
+                sendMailDomain.setParams(params);
+                sendMailDomain.setTemp("send-mail-cancel");
+                jmsTemplate.convertAndSend("sendMail",sendMailDomain);
+            }
 
             ReservationDomain reservationDomain = modelMapper.map(reservationEntity, ReservationDomain.class);
             reservationDomain.setAdult(reservationEntity.getGuestEntity().getAdult());
@@ -191,7 +208,7 @@ public class ReservationServiceImpl implements ReservationService {
     public void sendMail(ReservationRequest reservationRequest) {
         RoomEntity room = roomRepository.getById(reservationRequest.getRoomId());
         SendMailDomain sendMailDomain = new SendMailDomain();
-        sendMailDomain.setToEmail(Arrays.asList("ntmhang2@gmail.com"));
+        sendMailDomain.setToEmail(Collections.singletonList(reservationRequest.getEmail()));
         sendMailDomain.setSubject("Your reservation has been send to hotel manager");
         sendMailDomain.setText("Thanks for using our hotel reservation system.The manager will confirm your reservation soon.");
         Map<String, Object> params = new HashMap<>();
@@ -213,10 +230,13 @@ public class ReservationServiceImpl implements ReservationService {
         params.put("note", reservationRequest.getNote());
         params.put("diffDays", reservationRequest.getDiffDays());
         params.put("hotelId", room.getHotelId());
-        sendMailUtils.sendMailWithTemplate(sendMailDomain, "send-mail-reservation", params);
+        sendMailDomain.setTemp("send-mail-reservation");
+        sendMailDomain.setParams(params);
+        sendMailUtils.sendMailWithTemplate(sendMailDomain);
         sendMailDomain.setSubject("RATING THE HOTEL SERVICES");
         sendMailDomain.setText("Please rate the hotel services");
-        sendMailUtils.sendMailWithTemplate(sendMailDomain, "send-mail-rating", params);
+        sendMailDomain.setTemp("send-mail-rating");
+        sendMailUtils.sendMailWithTemplate(sendMailDomain);
 
 
     }

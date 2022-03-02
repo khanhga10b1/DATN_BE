@@ -2,6 +2,7 @@
 package hotel.booking.domain;
 
 import java.util.List;
+import java.util.Map;
 
 
 public class SendMailDomain{
@@ -10,6 +11,8 @@ public class SendMailDomain{
 	private List<String> toEmail;
 	private String subject;
 	private String text;
+	private Map<String, Object> params;
+	private String temp;
 
 	public List<String> getToEmail() {
 		return toEmail;
@@ -33,5 +36,21 @@ public class SendMailDomain{
 
 	public String getText() {
 		return text;
+	}
+
+	public Map<String, Object> getParams() {
+		return params;
+	}
+
+	public void setParams(Map<String, Object> params) {
+		this.params = params;
+	}
+
+	public String getTemp() {
+		return temp;
+	}
+
+	public void setTemp(String temp) {
+		this.temp = temp;
 	}
 }
