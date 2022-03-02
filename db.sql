@@ -202,4 +202,6 @@ create table "reservation"
 );
 
 
-
+INSERT INTO public.role (id, code, name, created_by, created_date, updated_by, updated_date) VALUES (1, 'USER', 'User', null, now(), null, now());
+INSERT INTO public.role (id, code, name, created_by, created_date, updated_by, updated_date) VALUES (2, 'ADMIN', 'Admin', null, now(), null, now());
+INSERT INTO public.role (id, code, name, created_by, created_date, updated_by, updated_date) VALUES (3, 'SUPER_ADMIN', 'Super Admin', null, now(), null, now());
