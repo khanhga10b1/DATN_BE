@@ -17,7 +17,7 @@ public interface HotelRepository extends JpaRepository<HotelEntity, Long> {
     @Query("select h from HotelEntity h where h.city like %?1% and h.name like %?2%")
     Page<HotelEntity> getHotelEntities(String city, String search, Pageable pageable);
 
-    @Query(value = "select * from hotel h order by h.rate desc limit 10", nativeQuery = true)
+    @Query(value = "select * from hotel h order by h.rate desc nulls last limit 10", nativeQuery = true)
     List<HotelEntity> getTopHotels();
 
     HotelEntity findFirstByAccountId(Long accountId);

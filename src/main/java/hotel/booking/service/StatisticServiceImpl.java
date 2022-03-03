@@ -126,7 +126,7 @@ public class StatisticServiceImpl implements StatisticService {
                 float percent = (float) Math.round(div * 10) / 10;
                 return new LocationDomain(hotel.getCity(), percent);
             }).limit(3).collect(Collectors.toList());
-            long other = hotels - countHotelDomains.stream().mapToLong(CountHotelDomain::getCount).sum();
+            long other = hotels - countHotelDomains.stream().mapToLong(CountHotelDomain::getCount).limit(3).sum();
 
             float div = (float) 100 * other / hotels;
             float percent = (float) Math.round(div * 10) / 10;
