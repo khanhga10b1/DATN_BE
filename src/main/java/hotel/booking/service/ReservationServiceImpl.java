@@ -20,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
@@ -50,6 +51,8 @@ public class ReservationServiceImpl implements ReservationService {
     private RoomRepository roomRepository;
     @Autowired
     private JmsTemplate jmsTemplate;
+    @Value("${web-react-url}")
+    private String url;
 
     @Override
     public ResponseEntity<ResponseByName<String, Object>> checkValidReservation(CheckValidRequest checkValidRequest) {
@@ -230,6 +233,7 @@ public class ReservationServiceImpl implements ReservationService {
         params.put("note", reservationRequest.getNote());
         params.put("diffDays", reservationRequest.getDiffDays());
         params.put("hotelId", room.getHotelId());
+        params.put("webUrl",url);
         sendMailDomain.setTemp("send-mail-reservation");
         sendMailDomain.setParams(params);
         sendMailUtils.sendMailWithTemplate(sendMailDomain);
