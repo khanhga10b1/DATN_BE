@@ -53,4 +53,15 @@ public class SendMailDomain{
 	public void setTemp(String temp) {
 		this.temp = temp;
 	}
+
+	@Override
+	public String toString() {
+		return "SendMailDomain{" +
+				"toEmail=" + toEmail +
+				", subject='" + subject + '\'' +
+				", text='" + text + '\'' +
+				", params=" + params +
+				", temp='" + temp + '\'' +
+				'}';
+	}
 }
