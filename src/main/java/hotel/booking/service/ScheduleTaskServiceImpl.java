@@ -14,10 +14,12 @@ public class ScheduleTaskServiceImpl implements ScheduleTaskService {
 
     @Value("${api-url}")
     private String apiUrl;
+    @Value("${web-react-url}")
+    private String webUrl;
 
 
     @Override
-    @Scheduled(fixedRate = 900000)
+//    @Scheduled(fixedRate = 900000)
     public void scheduleTaskWithFixedRate() {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
@@ -27,6 +29,7 @@ public class ScheduleTaskServiceImpl implements ScheduleTaskService {
         try {
             ResponseEntity<String> responseEntity = restTemplate.exchange(apiUrl+"/test", HttpMethod.GET, httpEntity, String.class);
             logger.info(responseEntity.getBody());
+            restTemplate.exchange(webUrl, HttpMethod.GET,httpEntity, String.class);
         } catch (Exception exception) {
             logger.info("call k dc");
         }
