@@ -19,7 +19,7 @@ public class ScheduleTaskServiceImpl implements ScheduleTaskService {
 
 
     @Override
-//    @Scheduled(fixedRate = 900000)
+    @Scheduled(fixedRate = 900000)
     public void scheduleTaskWithFixedRate() {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
