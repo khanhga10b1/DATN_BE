@@ -20,6 +20,7 @@ public class ReservationDomain {
     private Integer adult;
     private Integer children;
     private Long hotelId;
+    private Date createdDate;
 
     public ReservationDomain() {}
 
@@ -157,5 +158,13 @@ public class ReservationDomain {
 
     public Long getHotelId() {
         return hotelId;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 }
