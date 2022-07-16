@@ -18,20 +18,20 @@ public class ScheduleTaskServiceImpl implements ScheduleTaskService {
     private String webUrl;
 
 
-//     @Override
+    @Override
 //     @Scheduled(fixedRate = 900000)
-//     public void scheduleTaskWithFixedRate() {
-//         HttpHeaders headers = new HttpHeaders();
-//         headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-//         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-//         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
-//         RestTemplate restTemplate = new RestTemplate();
-//         try {
-//             ResponseEntity<String> responseEntity = restTemplate.exchange(apiUrl+"/test", HttpMethod.GET, httpEntity, String.class);
-//             logger.info(responseEntity.getBody());
-//             restTemplate.exchange(webUrl, HttpMethod.GET,httpEntity, String.class);
-//         } catch (Exception exception) {
-//             logger.info("call k dc");
-//         }
-//     }
+    public void scheduleTaskWithFixedRate() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<String> httpEntity = new HttpEntity<>(headers);
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            ResponseEntity<String> responseEntity = restTemplate.exchange(apiUrl+"/test", HttpMethod.GET, httpEntity, String.class);
+            logger.info(responseEntity.getBody());
+            restTemplate.exchange(webUrl, HttpMethod.GET,httpEntity, String.class);
+        } catch (Exception exception) {
+            logger.info("call k dc");
+        }
+    }
 }
